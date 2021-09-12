@@ -23,9 +23,13 @@ COLLECTION_NAME = 'channel_files'  # If you are using the same database, then us
 
 # Messages
 START_MSG = """
-**Hi, I Am Auto Filter bot**
+**<i>Hey Bro !!!
+Am Just A Advance Auto Filter Bot....😉**
+Works only for </i><b><i>@TNROCKERS2021</i></b> <i>🤪 its order from my boss </i><i>@Rubandurai27</i>  <i>.
 
-Here you can search files in inline mode. Just press follwing buttons and start searching. @TNROCKERS2021
+For More Details Click Help Button Below..
+
+</i><i>@TN_linkZz</i>
 """
 
 SHARE_BUTTON_TEXT = 'Checkout {username} for searching files'
