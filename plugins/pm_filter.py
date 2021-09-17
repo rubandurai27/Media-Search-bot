@@ -106,15 +106,15 @@ async def filter(client, message):
         if API_KEY:
             poster=await get_poster(search)
         if poster:
-            await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
+            await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌</b>", reply_markup=InlineKeyboardMarkup(buttons))
         else:
-            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­  ­  ­  ­  ­  </b> 
+            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­
 
  <code>IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT</code> 
 
 <b>MOVIE NAME YEAR LANGUAGE
 </b>
-<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b> ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
+<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b> ­  ­  ­  ­  ­  </b>)", reply_markup=InlineKeyboardMarkup(buttons))
 
 @Client.on_message(filters.text & filters.group & filters.incoming & filters.chat(AUTH_GROUPS) if AUTH_GROUPS else filters.text & filters.group & filters.incoming)
 async def group(client, message):
