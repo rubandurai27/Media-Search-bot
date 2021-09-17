@@ -84,7 +84,7 @@ async def filter(client, message):
                 await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
 
             else:
-                await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­  ­ </b> 
+                await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­  ­ </b>)
 
  <code>IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT</code> 
 
@@ -108,7 +108,7 @@ async def filter(client, message):
         if poster:
             await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌</b>", reply_markup=InlineKeyboardMarkup(buttons))
         else:
-            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­
+            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­)
 
  <code>IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT</code> 
 
