@@ -90,7 +90,7 @@ async def filter(client, message):
 
 <b>MOVIE NAME YEAR LANGUAGE
 </b>
-<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b>", reply_markup=InlineKeyboardMarkup(buttons))
+<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b>)", reply_markup=InlineKeyboardMarkup(buttons))
             return
 
         data = BUTTONS[keyword]
