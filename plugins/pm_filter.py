@@ -1,12 +1,12 @@
 #Kanged From @TroJanZheX
-from info import AUTH_CHANNEL, AUTH_USERS, CUSTOM_FILE_CAPTION, API_KEY, AUTH_GROUPS
+from info import AUTH_CHANNEL, AUTH_USERS
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram import Client, filters
 import re
 from pyrogram.errors import UserNotParticipant
-from utils import get_filter_results, get_file_details, is_subscribed, get_poster
+from utils import get_filter_results, get_file_details, is_subscribed
 BUTTONS = {}
-BOT = {}
+
 @Client.on_message(filters.text & filters.private & filters.incoming & filters.user(AUTH_USERS) if AUTH_USERS else filters.text & filters.private & filters.incoming)
 async def filter(client, message):
     if message.text.startswith("/"):
@@ -26,7 +26,7 @@ async def filter(client, message):
         except UserNotParticipant:
             await client.send_message(
                 chat_id=message.from_user.id,
-                text="**Please Join My Updates Channel to use this Bot!**",
+                text="** ⚠️ Please Join My Updates Channel to use this Me 😜**",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -59,7 +59,7 @@ async def filter(client, message):
                     [InlineKeyboardButton(text=f"{filename}",callback_data=f"subinps#{file_id}")]
                     )
         else:
-            await client.send_sticker(chat_id=message.from_user.id, sticker='CAADBQADMwIAAtbcmFelnLaGAZhgBwI')
+            await client.send_sticker(chat_id=message.from_user.id, sticker='CAACAgUAAxkBAALDhWD6PbrlyLbBNwgWBYAPh6RfeuIHAAKVAgAC35fRVyBNeILSLMvRIAQ')
             return
 
         if not btn:
@@ -77,20 +77,10 @@ async def filter(client, message):
             buttons.append(
                 [InlineKeyboardButton(text="📃 Pages 1/1",callback_data="pages")]
             )
-            poster=None
-            if API_KEY:
-                poster=await get_poster(search)
-            if poster:
-                await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
-
-            else:
-                await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­  ­ </b>)
-
- <code>IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT</code> 
-
-<b>MOVIE NAME YEAR LANGUAGE
-</b>
-<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b>)", reply_markup=InlineKeyboardMarkup(buttons))
+            await message.reply_text(
+                f"<b>Here is What I Found In My Database For Your Query 👉 `{search}`  ­  ­  ­ </b> \n\n `IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT` \n\n**MOVIE NAME YEAR LANGUAGE** @TNFILMBOXOFFICIAL",
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )
             return
 
         data = BUTTONS[keyword]
@@ -102,32 +92,21 @@ async def filter(client, message):
         buttons.append(
             [InlineKeyboardButton(text=f"📃 Pages 1/{data['total']}",callback_data="pages")]
         )
-        poster=None
-        if API_KEY:
-            poster=await get_poster(search)
-        if poster:
-            await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌</b>", reply_markup=InlineKeyboardMarkup(buttons))
-        else:
-            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query  👉 </b><code> {search} </code><b>­)
 
- <code>IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT</code> 
+        await message.reply_text(
+                f"<b>Here is What I Found In My Database For Your Query  👉 `{search}`­  ­  ­  ­  ­  </b> \n\n `IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT` \n\n**MOVIE NAME YEAR LANGUAGE**" "@TNROCKERS2021",
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )    
 
-<b>MOVIE NAME YEAR LANGUAGE
-</b>
-<b><i>JOIN : 🔗 </i></b><b><i>@TNFILMBOXOFFICIAL</i></b> <b><i>🔗</i></b> ­  ­  ­  ­  ­  </b>)", reply_markup=InlineKeyboardMarkup(buttons))
-
-@Client.on_message(filters.text & filters.group & filters.incoming & filters.chat(AUTH_GROUPS) if AUTH_GROUPS else filters.text & filters.group & filters.incoming)
+@Client.on_message(filters.group & filters.text & filters.incoming)
 async def group(client, message):
     if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
         return
     if 2 < len(message.text) < 50:    
         btn = []
         search = message.text
-        nyva=BOT.get("username")
-        if not nyva:
-            botusername=await client.get_me()
-            nyva=botusername.username
-            BOT["username"]=nyva
+        botusername=await client.get_me()
+        nyva=botusername.username
         files = await get_filter_results(query=search)
         if files:
             for file in files:
@@ -153,13 +132,10 @@ async def group(client, message):
             buttons.append(
                 [InlineKeyboardButton(text="📃 Pages 1/1",callback_data="pages")]
             )
-            poster=None
-            if API_KEY:
-                poster=await get_poster(search)
-            if poster:
-                await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­ @TNFILMBOXOFFICIAL ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
-            else:
-                await message.reply_text(f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
+            await message.reply_text(
+                f"<b>Here is What I Found In My Database For Your Query `{search}` ­  ­  ­  ­  </b> \n\n `IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT` \n\n**MOVIE NAME YEAR LANGUAGE** @TNFILMBOXOFFICIAL",
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )
             return
 
         data = BUTTONS[keyword]
@@ -171,13 +147,11 @@ async def group(client, message):
         buttons.append(
             [InlineKeyboardButton(text=f"📃 Pages 1/{data['total']}",callback_data="pages")]
         )
-        poster=None
-        if API_KEY:
-            poster=await get_poster(search)
-        if poster:
-            await message.reply_photo(photo=poster, caption=f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  ­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
-        else:
-            await message.reply_text(f"<b>Here is What I Found In My Database For Your Query {search} ‌‌‌‌‎ ­  ­  <b>Join</b> : 🔗 <b>@TNFILMBOXOFFICIAL</b> 🔗­  ­  ­  </b>", reply_markup=InlineKeyboardMarkup(buttons))
+
+        await message.reply_text(
+                f"<b>Here is What I Found In My Database For Your Query `{search}` ‌‎ ­  ­  ­  ­  ­  </b> \n\n `IF YOU DIDN'T FIND ANY RESULTS,THEN FOLLOW BELOW FORMAT` \n\n**MOVIE NAME YEAR LANGUAGE** @TNFILMBOXOFFICIAL",
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )
 
     
 def get_size(size):
@@ -197,6 +171,9 @@ def split_list(l, n):
 
 
 
+
+
+
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
     clicked = query.from_user.id
@@ -208,12 +185,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
     if (clicked == typed):
 
         if query.data.startswith("next"):
+            await query.answer()
             ident, index, keyword = query.data.split("_")
-            try:
-                data = BUTTONS[keyword]
-            except KeyError:
-                await query.answer("You are using this for one of my old message, please send the request again.",show_alert=True)
-                return
+            data = BUTTONS[keyword]
 
             if int(index) == int(data["total"]) - 2:
                 buttons = data['buttons'][int(index)+1].copy()
@@ -246,12 +220,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
 
         elif query.data.startswith("back"):
+            await query.answer()
             ident, index, keyword = query.data.split("_")
-            try:
-                data = BUTTONS[keyword]
-            except KeyError:
-                await query.answer("You are using this for one of my old message, please send the request again.",show_alert=True)
-                return
+            data = BUTTONS[keyword] 
 
             if int(index) == 1:
                 buttons = data['buttons'][int(index)-1].copy()
@@ -285,10 +256,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
             buttons = [
                 [
                     InlineKeyboardButton('Update Channel', url='https://t.me/TNFILMBOXOFFICIAL'),
-                    InlineKeyboardButton('Source Code', url='https://github.com/subinps/Media-Search-bot')
+                    InlineKeyboardButton('Update Group', url='https://t.me/TNROCKERS2021')
                 ]
                 ]
-            await query.message.edit(text="<b>Developer : <a href='https://t.me/RUBANDURAI27'>RUBANDURAI27</a>\nLanguage : <code>Python3</code>\nLibrary : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio</a>\nSource Code : <a href='https://github.com/subinps/Media-Search-bot'>Click here</a>\nUpdate Channel : <a href='https://t.me/TNFILMBOXOFFICIAL'>TNFILMBOXOFFICIAL</a> </b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+            await query.message.edit(text="<b>Developer : <a href='https://t.me/RUBANDURAI27'>JNS</a> 🥳\nLanguage : <code>Python3</code> 🤠\nLibrary : <a href='https://docs.pyrogram.org/'>Pyrogram asyncio</a>💫\nMovies : <a href='https://t.me/TNFILMBOXOFFICIAL'>TNFILMBOXOFFICIAL</a>☀️\nUpdate Channel : <a href='https://t.me/TN_linkZz'>TN_linkZz</a> 🌟</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
 
 
 
@@ -296,21 +267,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ident, file_id = query.data.split("#")
             filedetails = await get_file_details(file_id)
             for files in filedetails:
-                title = files.file_name
+                file_caption = files.file_name
                 size=files.file_size
-                f_caption=files.caption
-                if CUSTOM_FILE_CAPTION:
-                    try:
-                        f_caption=CUSTOM_FILE_CAPTION.format(file_name=title, file_size=size, file_caption=f_caption)
-                    except Exception as e:
-                        print(e)
-                        f_caption=f_caption
-                if f_caption is None:
-                    f_caption = f"{files.file_name}"
+                caption = files.caption
                 buttons = [
                     [
-                        InlineKeyboardButton('More Channels', url='https://t.me/TN_linkZz'),
-                        InlineKeyboardButton('Update Channel', url='https://t.me/TNFILMBOXOFFICIAL')
+                        InlineKeyboardButton('More Movies', url='https://t.me/TNFILMBOXOFFICIAL'),
+                        InlineKeyboardButton('Update Channel', url='https://t.me/TN_linkZz')
                     ]
                     ]
                 
@@ -318,7 +281,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
-                    caption=f_caption,
+                    caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons)
                     )
         elif query.data.startswith("checksub"):
@@ -328,20 +291,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ident, file_id = query.data.split("#")
             filedetails = await get_file_details(file_id)
             for files in filedetails:
-                title = files.file_name
+                file_caption = files.file_name
                 size=files.file_size
-                f_caption=files.caption
-                if CUSTOM_FILE_CAPTION:
-                    try:
-                        f_caption=CUSTOM_FILE_CAPTION.format(file_name=title, file_size=size, file_caption=f_caption)
-                    except Exception as e:
-                        print(e)
-                        f_caption=f_caption
-                if f_caption is None:
-                    f_caption = f"{title}"
+                caption = files.caption
                 buttons = [
                     [
-                        InlineKeyboardButton('Support Group ', url='https://t.me/TNROCKERS2021'),
+                        InlineKeyboardButton('More Movies', url='https://t.me/TNROCKERS2021'),
                         InlineKeyboardButton('Update Channel', url='https://t.me/TNFILMBOXOFFICIAL')
                     ]
                     ]
@@ -350,7 +305,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 await client.send_cached_media(
                     chat_id=query.from_user.id,
                     file_id=file_id,
-                    caption=f_caption,
+                    caption=caption,
                     reply_markup=InlineKeyboardMarkup(buttons)
                     )
 
