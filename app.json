@@ -42,6 +42,9 @@
             "value": "",
             "required": false
         },
+         "BROADCAST_AS_COPY": {
+            "description": "Broadcast as Copy or with Forward Tag. Value should be True/False."
+        },
         "AUTH_CHANNEL": {
             "description": "ID of channel.Make sure bot is admin in this channel. Without subscribing this channel users cannot use bot.",
             "value": "",
