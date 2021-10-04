@@ -1,63 +1,69 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+# (c) @AbirHasan2005
 
-import os
-
-import threading
-import asyncio
-
-from sqlalchemy import Column, Integer, Boolean, String, ForeignKey, UniqueConstraint, func
+import datetime
+import motor.motor_asyncio
 
 
-from config import Config
+class Database:
 
+    def __init__(self, uri, database_name):
+        self._client = motor.motor_asyncio.AsyncIOMotorClient(uri)
+        self.db = self._client[database_name]
+        self.col = self.db.users
 
-def start() -> scoped_session:
-    engine = create_engine(Config.DB_URL, client_encoding="utf8")
-    BASE.metadata.bind = engine
-    BASE.metadata.create_all(engine)
-    return scoped_session(sessionmaker(bind=engine, autoflush=False))
+    def new_user(self, id):
+        return dict(
+            id=id,
+            join_date=datetime.date.today().isoformat(),
+            prefix=None,
+            upload_as_doc=True,
+            thumbnail=None,
+            caption=None
+        )
 
+    async def add_user(self, id):
+        user = self.new_user(id)
+        await self.col.insert_one(user)
 
-BASE = declarative_base()
-SESSION = start()
+    async def is_user_exist(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return True if user else False
 
-INSERTION_LOCK = threading.RLock()
+    async def total_users_count(self):
+        count = await self.col.count_documents({})
+        return count
 
-class custom_caption(BASE):
-    __tablename__ = "caption"
-    id = Column(Integer, primary_key=True)
-    caption = Column(String)
-    
-    def __init__(self, id, caption):
-        self.id = id
-        self.caption = caption
+    async def get_all_users(self):
+        all_users = self.col.find({})
+        return all_users
 
-custom_caption.__table__.create(checkfirst=True)
+    async def delete_user(self, user_id):
+        await self.col.delete_many({'id': int(user_id)})
 
-async def update_caption(id, caption):
-    with INSERTION_LOCK:
-        cap = SESSION.query(custom_caption).get(id)
-        if not cap:
-            cap = custom_caption(id, caption)
-            SESSION.add(cap)
-            SESSION.flush()
-        else:
-            SESSION.delete(cap)
-            cap = custom_caption(id, caption)
-            SESSION.add(cap)
-        SESSION.commit()
+    async def set_prefix(self, id, prefix):
+        await self.col.update_one({'id': id}, {'$set': {'prefix': prefix}})
 
-async def del_caption(id):
-    with INSERTION_LOCK:
-        msg = SESSION.query(custom_caption).get(id)
-        SESSION.delete(msg)
-        SESSION.commit()
+    async def get_prefix(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('prefix', None)
 
-async def get_caption(id):
-    try:
-        caption = SESSION.query(custom_caption).get(id)
-        return caption
-    finally:
-        SESSION.close()
+    async def set_upload_as_doc(self, id, upload_as_doc):
+        await self.col.update_one({'id': id}, {'$set': {'upload_as_doc': upload_as_doc}})
+
+    async def get_upload_as_doc(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('upload_as_doc', False)
+
+    async def set_thumbnail(self, id, thumbnail):
+        await self.col.update_one({'id': id}, {'$set': {'thumbnail': thumbnail}})
+
+    async def get_thumbnail(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('thumbnail', None)
+
+    async def set_caption(self, id, caption):
+        await self.col.update_one({'id': id}, {'$set': {'caption': caption}})
+
+    async def get_caption(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('caption', None)
